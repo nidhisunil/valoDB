@@ -28,7 +28,7 @@ const agentSchema = {
 };
 const Agent = mongoose.model("Agent", agentSchema);
 
-//get
+//get all
 app.get("/agents",function(req,res){
   Agent.find(function(err, foundAgents){
     if(!err){
@@ -56,6 +56,19 @@ app.post("/agents", function(req,res){
     }
   });
 });
+
+//delete all
+app.delete("/agents", function(req,res){
+  Agent.deleteMany(function(err){
+    if(!err){
+      res.send("Successfully deleted all agents");
+    }else{
+      res.send(err);
+    }
+  });
+});
+
+
 
 
 app.listen(3000, function() {
