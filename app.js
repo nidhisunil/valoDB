@@ -28,6 +28,7 @@ const agentSchema = {
 };
 const Agent = mongoose.model("Agent", agentSchema);
 
+//get
 app.get("/agents",function(req,res){
   Agent.find(function(err, foundAgents){
     if(!err){
@@ -36,6 +37,23 @@ app.get("/agents",function(req,res){
       res.send(err);
     }
 
+  });
+});
+
+//post
+app.post("/agents", function(req,res){
+  const newAgent = new Agent({
+    name: req.query.name,
+    type: req.query.type,
+    ability: req.query.ability
+  });
+  newAgent.save(function(err){
+    if(!err){
+      res.send("A new agent has been added");
+    }
+    else{
+      res.send(err);
+    }
   });
 });
 
