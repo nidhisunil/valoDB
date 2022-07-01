@@ -28,45 +28,47 @@ const agentSchema = {
 };
 const Agent = mongoose.model("Agent", agentSchema);
 
-//get all
-app.get("/agents",function(req,res){
-  Agent.find(function(err, foundAgents){
-    if(!err){
-      res.send(foundAgents);
-    }else{
-      res.send(err);
-    }
+//chained routes get, post, delete for /agents
+app.route("/agents").get(
+  function(req,res){
+    Agent.find(function(err, foundAgents){
+      if(!err){
+        res.send(foundAgents);
+      }else{
+        res.send(err);
+      }
+    });
+  }
 
-  });
-});
+).post(
+  function(req,res){
+    const newAgent = new Agent({
+      name: req.query.name,
+      type: req.query.type,
+      ability: req.query.ability
+    });
+    newAgent.save(function(err){
+      if(!err){
+        res.send("A new agent has been added");
+      }
+      else{
+        res.send(err);
+      }
+    });
+  }
 
-//post
-app.post("/agents", function(req,res){
-  const newAgent = new Agent({
-    name: req.query.name,
-    type: req.query.type,
-    ability: req.query.ability
-  });
-  newAgent.save(function(err){
-    if(!err){
-      res.send("A new agent has been added");
-    }
-    else{
-      res.send(err);
-    }
-  });
-});
+).delete(
+  function(req,res){
+    Agent.deleteMany(function(err){
+      if(!err){
+        res.send("Successfully deleted all agents");
+      }else{
+        res.send(err);
+      }
+    });
+  }
+);
 
-//delete all
-app.delete("/agents", function(req,res){
-  Agent.deleteMany(function(err){
-    if(!err){
-      res.send("Successfully deleted all agents");
-    }else{
-      res.send(err);
-    }
-  });
-});
 
 
 
