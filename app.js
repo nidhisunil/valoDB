@@ -99,9 +99,38 @@ app.route("/agents/:agentName")
             res.send(err);
           }
         }
-      )
-    }
-  );
+      );
+    })
+
+    .patch( //replaces only the mentioned fields
+      function(req,res){
+        Agent.update(
+          {name: req.params.agentName},
+          {$set: req.body},
+          function(err){
+            if(!err){
+              res.send("Succesfully updated agent details");
+            }else{
+              res.send(err);
+            }
+          }
+        );
+      })
+
+    .delete(
+      function(req,res){
+        Agent.deleteOne(
+          {name: req.params.agentName},
+          function(err){
+            if(!err){
+              res.send("Successfully deleted agent");
+            } else{
+              res.send(err);
+            }
+          }
+        );
+      }
+    );
 
 
 
