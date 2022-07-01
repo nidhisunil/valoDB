@@ -30,6 +30,7 @@ const Agent = mongoose.model("Agent", agentSchema);
 
 //chained routes get, post, delete for all agents
 app.route("/agents")
+
 .get(
   function(req,res){
     Agent.find(function(err, foundAgents){
@@ -41,6 +42,7 @@ app.route("/agents")
     });
   }
 )
+
 .post(
   function(req,res){
     const newAgent = new Agent({
@@ -58,6 +60,7 @@ app.route("/agents")
     });
   }
 )
+
 .delete(
   function(req,res){
     Agent.deleteMany(function(err){
@@ -81,7 +84,24 @@ app.route("/agents/:agentName")
         res.send("No such agent found");
       }
     });
-  });
+  })
+
+  .put( //replaces the entire resource wth new values
+    function(req,res){
+      Agent.update(
+        {name: req.params.agentName},
+        {name: req.query.name, type: req.query.type, ability: req.query.ability},
+        {overwrite:true},
+        function(err){
+          if(!err){
+            res.send("Agent details have been successfully changed");
+          }else{
+            res.send(err);
+          }
+        }
+      )
+    }
+  );
 
 
 
